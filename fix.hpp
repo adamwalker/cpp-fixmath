@@ -1,3 +1,6 @@
+#ifndef _fix_hpp_
+#define _fix_hpp_
+
 #include <csetjmp>
 #include <fix16.h>
 #include <cmath>
@@ -8,11 +11,11 @@
 template <class T>
 T get_zero();
 
-template <> float get_zero(){
+template <> inline float get_zero(){
     return 0;
 }
 
-template <> double get_zero(){
+template <> inline double get_zero(){
     return 0;
 }
 
@@ -36,59 +39,59 @@ class fix16 {
     }
 };
 
-template <> fix16 get_zero(){
+template <> inline fix16 get_zero(){
     fix16 ret;
     ret.val = 0;
     return ret;
 }
 
-fix16 operator+(fix16 x, fix16 y){
+inline fix16 operator+(fix16 x, fix16 y){
     fix16 ret;
     ret.val = fix16_add(x.val, y.val);
     return ret;
 }
 
-void operator+=(fix16 &x, fix16 y){
+inline void operator+=(fix16 &x, fix16 y){
     x = x + y;
 }
 
-fix16 operator-(fix16 x, fix16 y){
+inline fix16 operator-(fix16 x, fix16 y){
     fix16 ret;
     ret.val = fix16_sub(x.val, y.val);
     return ret;
 }
 
-fix16 operator-(fix16 x){
+inline fix16 operator-(fix16 x){
     fix16 ret;
     ret.val = -x.val;
     return ret;
 }
 
-fix16 operator*(fix16 x, fix16 y){
+inline fix16 operator*(fix16 x, fix16 y){
     fix16 ret;
     ret.val = fix16_mul(x.val, y.val);
     return ret;
 }
 
-fix16 operator/(fix16 x, fix16 y){
+inline fix16 operator/(fix16 x, fix16 y){
     fix16 ret;
     ret.val = fix16_div(x.val, y.val);
     return ret;
 }
 
-fix16 sqrt(fix16 x){
+inline fix16 sqrt(fix16 x){
     fix16 ret;
     ret.val = fix16_sqrt(x.val);
     return ret;
 }
 
-fix16 sin(fix16 x){
+inline fix16 sin(fix16 x){
     fix16 ret;
     ret.val = fix16_sin(x.val);
     return ret;
 }
 
-fix16 cos(fix16 x){
+inline fix16 cos(fix16 x){
     fix16 ret;
     ret.val = fix16_cos(x.val);
     return ret;
@@ -114,59 +117,59 @@ class fix16Sat {
     }
 };
 
-template <> fix16Sat get_zero(){
+template <> inline fix16Sat get_zero(){
     fix16Sat ret;
     ret.val = 0;
     return ret;
 }
 
-fix16Sat operator+(fix16Sat x, fix16Sat y){
+inline fix16Sat operator+(fix16Sat x, fix16Sat y){
     fix16Sat ret;
     ret.val = fix16_sadd(x.val, y.val);
     return ret;
 }
 
-void operator+=(fix16Sat &x, fix16Sat y){
+inline void operator+=(fix16Sat &x, fix16Sat y){
     x = x + y;
 }
 
-fix16Sat operator-(fix16Sat x, fix16Sat y){
+inline fix16Sat operator-(fix16Sat x, fix16Sat y){
     fix16Sat ret;
     ret.val = fix16_ssub(x.val, y.val);
     return ret;
 }
 
-fix16Sat operator-(fix16Sat x){
+inline fix16Sat operator-(fix16Sat x){
     fix16Sat ret;
     ret.val = -x.val;
     return ret;
 }
 
-fix16Sat operator*(fix16Sat x, fix16Sat y){
+inline fix16Sat operator*(fix16Sat x, fix16Sat y){
     fix16Sat ret;
     ret.val = fix16_smul(x.val, y.val);
     return ret;
 }
 
-fix16Sat operator/(fix16Sat x, fix16Sat y){
+inline fix16Sat operator/(fix16Sat x, fix16Sat y){
     fix16Sat ret;
     ret.val = fix16_sdiv(x.val, y.val);
     return ret;
 }
 
-fix16Sat sqrt(fix16Sat x){
+inline fix16Sat sqrt(fix16Sat x){
     fix16Sat ret;
     ret.val = fix16_sqrt(x.val);
     return ret;
 }
 
-fix16Sat sin(fix16Sat x){
+inline fix16Sat sin(fix16Sat x){
     fix16Sat ret;
     ret.val = fix16_sin(x.val);
     return ret;
 }
 
-fix16Sat cos(fix16Sat x){
+inline fix16Sat cos(fix16Sat x){
     fix16Sat ret;
     ret.val = fix16_cos(x.val);
     return ret;
@@ -175,7 +178,7 @@ fix16Sat cos(fix16Sat x){
 /*
  * Exception throwing arithmetic
  */
-jmp_buf overflow_exc;
+extern jmp_buf overflow_exc;
 
 class fix16Exc {
     public:
@@ -194,13 +197,13 @@ class fix16Exc {
     }
 };
 
-template <> fix16Exc get_zero(){
+template <> inline fix16Exc get_zero(){
     fix16Exc ret;
     ret.val = 0;
     return ret;
 }
 
-fix16Exc operator+(fix16Exc x, fix16Exc y){
+inline fix16Exc operator+(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_add(x.val, y.val);
 
@@ -210,11 +213,11 @@ fix16Exc operator+(fix16Exc x, fix16Exc y){
     return ret;
 }
 
-void operator+=(fix16Exc &x, fix16Exc y){
+inline void operator+=(fix16Exc &x, fix16Exc y){
     x = x + y;
 }
 
-fix16Exc operator-(fix16Exc x, fix16Exc y){
+inline fix16Exc operator-(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_sub(x.val, y.val);
     if(ret.val == fix16_overflow){
@@ -223,13 +226,13 @@ fix16Exc operator-(fix16Exc x, fix16Exc y){
     return ret;
 }
 
-fix16Exc operator-(fix16Exc x){
+inline fix16Exc operator-(fix16Exc x){
     fix16Exc ret;
     ret.val = -x.val;
     return ret;
 }
 
-fix16Exc operator*(fix16Exc x, fix16Exc y){
+inline fix16Exc operator*(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_mul(x.val, y.val);
     if(ret.val == fix16_overflow){
@@ -238,7 +241,7 @@ fix16Exc operator*(fix16Exc x, fix16Exc y){
     return ret;
 }
 
-fix16Exc operator/(fix16Exc x, fix16Exc y){
+inline fix16Exc operator/(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_div(x.val, y.val);
     if(ret.val == fix16_overflow){
@@ -247,20 +250,22 @@ fix16Exc operator/(fix16Exc x, fix16Exc y){
     return ret;
 }
 
-fix16Exc sqrt(fix16Exc x){
+inline fix16Exc sqrt(fix16Exc x){
     fix16Exc ret;
     ret.val = fix16_sqrt(x.val);
     return ret;
 }
 
-fix16Exc sin(fix16Exc x){
+inline fix16Exc sin(fix16Exc x){
     fix16Exc ret;
     ret.val = fix16_sin(x.val);
     return ret;
 }
 
-fix16Exc cos(fix16Exc x){
+inline fix16Exc cos(fix16Exc x){
     fix16Exc ret;
     ret.val = fix16_cos(x.val);
     return ret;
 }
+
+#endif
