@@ -178,7 +178,7 @@ inline fix16Sat cos(fix16Sat x){
 /*
  * Exception throwing arithmetic
  */
-extern jmp_buf overflow_exc;
+extern jmp_buf *overflow_exc;
 
 class fix16Exc {
     public:
@@ -208,7 +208,7 @@ inline fix16Exc operator+(fix16Exc x, fix16Exc y){
     ret.val = fix16_add(x.val, y.val);
 
     if(ret.val == fix16_overflow){
-        longjmp(overflow_exc, 1);
+        longjmp(*overflow_exc, 1);
     }
     return ret;
 }
@@ -221,7 +221,7 @@ inline fix16Exc operator-(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_sub(x.val, y.val);
     if(ret.val == fix16_overflow){
-        longjmp(overflow_exc, 1);
+        longjmp(*overflow_exc, 1);
     }
     return ret;
 }
@@ -236,7 +236,7 @@ inline fix16Exc operator*(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_mul(x.val, y.val);
     if(ret.val == fix16_overflow){
-        longjmp(overflow_exc, 1);
+        longjmp(*overflow_exc, 1);
     }
     return ret;
 }
@@ -245,7 +245,7 @@ inline fix16Exc operator/(fix16Exc x, fix16Exc y){
     fix16Exc ret;
     ret.val = fix16_div(x.val, y.val);
     if(ret.val == fix16_overflow){
-        longjmp(overflow_exc, 1);
+        longjmp(*overflow_exc, 1);
     }
     return ret;
 }
@@ -266,6 +266,14 @@ inline fix16Exc cos(fix16Exc x){
     fix16Exc ret;
     ret.val = fix16_cos(x.val);
     return ret;
+}
+
+inline bool operator==(const fix16Exc x, const fix16Exc y){
+    return x.val == y.val;
+}
+
+inline bool lt_epsilon(const fix16Exc x){
+    return x.val < 5;
 }
 
 #endif
